@@ -105,7 +105,7 @@ class Users {
 		$check = $db->num_rows('users',array('username','password'),array($username,$password));
 		if($check > 0) {
 			$ip = $_SERVER["REMOTE_ADDR"];
-			$useragent = $_SERVER["HTTP_USER_AGENT"];
+			$useragent = mysql_real_escape_string($_SERVER["HTTP_USER_AGENT"]);
 			$cookie_hash = md5($username.'-'.$password);
 			$fetch = $db->fetch('users',array('username','password'),array($username,$password));
 			$fetch = $fetch[0];
@@ -152,7 +152,7 @@ class Users {
 			if(isset($_COOKIE['login'])) setcookie ("login", '', time() - 3600);
 			elseif(isset($_SESSION['login'])) unset($_SESSION['login']);
 			$ip = $_SERVER["REMOTE_ADDR"];
-			$useragent = $_SERVER["HTTP_USER_AGENT"];
+			$useragent = mysql_real_escape_string($_SERVER["HTTP_USER_AGENT"]);
 			$delete = $db->delete('users_sessions',array('user_id','ip','useragent'),
 			array($user_id,$ip,$useragent));
 			if($delete) return true;
